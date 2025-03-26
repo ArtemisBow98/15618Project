@@ -1,9 +1,3 @@
-<!-- ---
-layout: page
-title: "15-618 Final Project"
-permalink: /
---- -->
-
 <!-- Inline CSS for styling the title and navigation -->
 <style>
 .header-title {
