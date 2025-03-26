@@ -34,7 +34,7 @@ nav a:hover {
 <!-- Navigation Links -->
 <nav>
   <a href="/">Proposal</a> |
-  <a href="/page1">Midterm Report</a> |
+  <a href="/page1">Milestone Report</a> |
   <a href="/page2">Final Report</a>
 </nav>
 
@@ -61,18 +61,7 @@ The serial algorithm consists of several key steps:
 
 An important aspect of this algorithm is that many of its tasks can benefit from parallelism. For example, the energy calculation for each pixel is an independent operation, and the pixel shifting during seam removal can be done concurrently. Additionally, parts of the dynamic programming used in seam identification can be restructured to run in parallel. Speeding up these operations both within each iteration and having parallel between iterations can greatly reduce overall processing time [Trobec et al., 2018](https://doi.org/10.1007/978-3-319-98833-7).
 
-Below is a block diagram illustrating one iteration of the seam carving process, represented using a Mermaid flowchart:
-
-~~~mermaid
-flowchart TD
-    A["Input Image"] --> B["Compute Energy for Each Pixel"]
-    B --> C["Identify Optimal Seam with Dynamic Programming"]
-    C --> D["Remove Seam & Shift Pixels"]
-    D --> E["Updated Image"]
-    E --> F["Repeat Until Target Size Reached"]
-~~~
-
-And here is a pseudocode outline for one iteration:
+Here is a pseudocode outline for one iteration:
 
 ~~~plaintext
 for each seam removal iteration:
@@ -88,15 +77,17 @@ The energy calculation and pixel shifting are originally embarrassingly parallel
 
 ## The Challenge
 
-The primary challenge in parallelizing the seam carving algorithm lies in its dynamic programming component and the serial dependency between iterations. While the energy calculation and pixel shifting are originally embarrassingly parallel tasks, the process of identifying the optimal seam using dynamic programming introduces significant dependencies. In this phase, each pixel’s cumulative energy is computed based on the values of neighboring pixels from previous rows or columns, creating a chain of dependencies that must be carefully managed to avoid race conditions and excessive synchronization overhead.
+- **Dynamic Programming Dependencies:**  
+  In the dynamic programming phase for seam identification, each pixel’s cumulative energy is computed based on the values of neighboring pixels from previous rows or columns. This creates a chain of dependencies that must be carefully managed to avoid race conditions and excessive synchronization overhead.
 
-Furthermore, after each seam is removed, the image is updated and the energy landscape changes, so each iteration depends on the results of the previous one. This serial dependency between iterations restricts the amount of concurrency that can be exploited across the entire algorithm.
+- **Inter-Iteration Dependency:**  
+  After each seam removal, the image is updated and the energy landscape changes. This means that every new iteration depends on the results of the previous one, limiting the overall concurrency that can be exploited in the algorithm.
 
-Memory access characteristics also play a crucial role. While the energy computation and pixel shifting phases exhibit good spatial locality—since neighboring pixels are processed together—the dynamic programming phase may have irregular memory access patterns. This irregularity can lead to unpredictable communication overhead between processing elements and potentially higher synchronization costs, thereby affecting load balance and overall performance.
+- **Memory Access Characteristics:**  
+  While the energy calculation and pixel shifting phases benefit from good spatial locality, the dynamic programming phase may involve irregular memory access patterns. This can lead to unpredictable communication overhead and higher synchronization costs, which negatively affect load balance and overall performance.
 
-Mapping this workload onto a multicore CPU system using OpenMP is challenging due to the system’s architecture and resource constraints. In our target system—with one level of shared cache and potentially multiple CPUs running a high number of threads—data must be organized in a cache-friendly manner to avoid a high communication-to-computation ratio during the dynamic programming phase. If memory accesses are not optimized for the shared cache, performance can suffer significantly. Additionally, when processing complex regions of the image, divergent execution paths may occur, which further reduces parallel efficiency and increases synchronization overhead.
-
-By undertaking this project, we aim to explore methods for restructuring dynamic programming to reduce dependency overhead, improve memory access patterns, and balance workload across processing cores. Ultimately, we hope to gain deeper insights into the challenges of parallelizing algorithms with inherent serial dependencies and learn effective techniques to overcome these constraints.
+- **System Constraints on Multicore CPUs:**  
+  Mapping the workload onto a multicore CPU system using OpenMP is challenging due to architectural constraints. With one level of shared cache and potentially multiple CPUs running a high number of threads, data must be organized in a cache-friendly manner to minimize the communication-to-computation ratio. Additionally, divergent execution paths when processing complex regions of the image can further reduce parallel efficiency and increase synchronization overhead.
 
 ## RESOURCES
 
