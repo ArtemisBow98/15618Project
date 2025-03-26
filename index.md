@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "My Project Proposal"
+title: "15-618 Final Project"
 permalink: /
 ---
 
@@ -33,24 +33,28 @@ nav a:hover {
 
 <!-- Navigation Links -->
 <nav>
-  <a href="/">Home</a> |
-  <a href="/page1">Page 1</a> |
-  <a href="/page2">Page 2</a>
+  <a href="/">Proposal</a> |
+  <a href="/page1">Midterm Report</a> |
+  <a href="/page2">Final Report</a>
 </nav>
 
 <!-- Main Content -->
-## Introduction
+## TITLE
 
-Welcome to my project proposal page! Here, you can write the detailed proposal for your project.
+## URL
 
-*Write your proposal content here...*
+<https://artemisbow98.github.io/15618Project/>
 
-## Proposal Details
+## SUMMARY
 
-- **Objective:** Describe the purpose of your project.
-- **Plan:** Outline the steps and strategies.
-- **Timeline:** Provide an estimated timeline.
-- **Resources:** List any resources needed.
+## BACKGROUND
 
-Feel free to add more sections as needed!
+## THE CHALLENGE
 
+## RESOURCES
+
+## GOALS AND DELIVERABLES
+
+## PLATFORM CHOICE
+
+## SCHEDULE
