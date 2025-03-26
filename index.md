@@ -1,8 +1,8 @@
----
+<!-- ---
 layout: page
 title: "15-618 Final Project"
 permalink: /
----
+--- -->
 
 <!-- Inline CSS for styling the title and navigation -->
 <style>
@@ -52,7 +52,7 @@ nav a:hover {
 
 We're going to parallelize the seam carving algorithm using OpenMP for multi-core CPUs, and compare their performance to a serialized version. Based on our performance measurements and observation, we plan to further optimize the parallel implementation for improved efficiency and scalability.
 
-## Background
+## BACKGROUND
 
 Seam carving is an image resizing algorithm introduced by Avidan and Shamir [Seam Carving Paper](https://dl.acm.org/doi/pdf/10.1145/1275808.1276390). In its original, serial form, the algorithm resizes images in a content-aware way by finding and removing "seams"—paths of connected pixels with low energy. This method is widely used to adapt images for different screen sizes or aspect ratios while keeping important content intact.
 
@@ -78,7 +78,7 @@ for each seam removal iteration:
 
 The energy calculation and pixel shifting are originally embarrassingly parallel tasks that can run simultaneously on different cores. Our project, however, will also focus on parallelizing the dynamic programming part used in seam identification, which is more challenging due to its inherent dependencies. In addition, we aim to explore optimizations between iterations to achieve an overall more efficient seam carving process.
 
-## The Challenge
+## THE CHALLENGE
 
 - **Dynamic Programming Dependencies:**
   In the dynamic programming phase for seam identification, each pixel’s cumulative energy is computed based on the values of neighboring pixels from previous rows or columns. This creates a chain of dependencies that must be carefully managed to avoid race conditions and excessive synchronization overhead.
