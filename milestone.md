@@ -24,15 +24,15 @@ We are a bit late on running performance debugging on the naive solution, and we
 ## Work completed
 
 1. We implemented a serialized version of seam carving algorithm. We use opencv to load/write images, and use pure C++ in manipulation of pixel BGRA values. The whole processing is divided to 4 stages: luminance, energy computation, dynamic programming for cumulative energy calculation, and minimal seam calculation.
-2. We implemented naive parallelization of the 3rd step - cumulative energy calculation with row-wise pixel splitting.
+2. We implemented naive parallelization of the 3rd step - cumulative energy calculation with row-wise pixel splitting. We inserted timing code and performed multiple evaluations on the performance of different stages of the naive solution.
 
 ## Goals of the project
 
 Our previous goals of the project are:
 
-1. Parallelization with OpenMP
-2. Optimization for Memory Access Pattern
-3. Profiling and Metrics Reporting
+1. **Parallelization with OpenMP**
+2. **Optimization for Memory Access Pattern**
+3. **Profiling and Metrics Reporting**
 
 And we think we are able to hit all goals. Previously we think we are able to achieve cross-iteration parallelization of the problem, but now we will make it a stretch goal in place of the SIMD goal. So the new stretch goals are:
 
@@ -44,10 +44,6 @@ And we think we are able to hit all goals. Previously we think we are able to ac
 We will be showing graphs for the performance improvements, and pictures for carving output.
 
 ## Preliminary Results
-
-### Overview and Work Completed
-
-Thus far, the project has focused on developing and evaluating the naive parallel seam carving algorithm. Key image processing steps—luminance calculation, Sobel filtering, gradient-to-dynamic programming conversion (grad_to_dp), and seam computation—have been implemented using OpenMP for parallelization. Benchmarks have been conducted with 1, 2, 4, and 8 threads to assess processing time and scalability.
 
 ### Experimental Setup and Timing Results
 
@@ -115,13 +111,10 @@ We will profile by dividing the image into multiple strips based on how many rep
 
 ## Issues
 
+- **GHC Compatibility:** The dependency of OpenCV in the current GHC environment is outdated, which prevents us from running it properly. We are referring to results obtained from local macs for now.
+
 - **Parallelization Overhead:** The observed increase in processing time with an increased number of threads suggests that synchronization and thread management overhead are offsetting the benefits of parallel execution.
 
-- **Load Balancing:** It appears that the grad_to_dp routine might not be evenly distributing the workload among threads, resulting in bottlenecks. Enhanced profiling and an optimized distribution strategy are required.
+- **Memory Access:** Potential issues related to memory and cache usage under parallel execution remain uncertain. Further investigation into resource allocation and concurrent memory access is needed.
 
 - **Scalability Concerns:** While the grad_to_dp phase shows significant scalability issues that need addressing, it is worth noting that other subroutines, such as luminance calculation and Sobel filtering, have not yet been parallelized. These represent additional opportunities for future parallelization improvements.
-
-- **Resource Management:** Potential issues related to memory and cache usage under parallel execution remain uncertain. Further investigation into resource allocation and concurrent memory access is needed.
-
-- **Schedule Adjustments:** Due to the aforementioned issues, adjustments in the project schedule might be necessary to allocate additional time for debugging, profiling, and optimization before final deliverables are completed.
-
