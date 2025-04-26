@@ -1,0 +1,1 @@
+./seam_carving -proc 1 input.png output.png

@@ -7,13 +7,13 @@ CXXFLAGS = -std=c++11 -O2 $(shell pkg-config --cflags opencv4)
 # Linker flags: fetched from pkg-config for OpenCV.
 LDFLAGS = $(shell pkg-config --libs opencv4)
 # Output executable name
-TARGET = mac
+TARGET = seam_carving
 # Source file(s)
 SOURCES = seam_carving.cpp
 
-.PHONY: mac clean
+.PHONY: seam_carving clean
 
-mac: $(TARGET)
+all: $(TARGET)
 
 $(TARGET): $(SOURCES)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCES) $(LDFLAGS)

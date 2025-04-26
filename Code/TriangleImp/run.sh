@@ -1,0 +1,1 @@
+./seam_carving -proc 8 -strips 12 input.png output.png
