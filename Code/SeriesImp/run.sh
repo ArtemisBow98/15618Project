@@ -1,0 +1,1 @@
+./seam_carving.cpp input.png output.png
