@@ -106,19 +106,44 @@ static void sobel_filter(const MatrixF &mat, MatrixF &grad) {
             grad.at(y, x) = sobel_filter_at(mat, x, y);
 }
 
+// static void grad_to_dp(const MatrixF &grad, MatrixF &dp) {
+//     assert(grad.width == dp.width && grad.height == dp.height);
+//     int W = grad.width, H = grad.height;
+//     for (int x = 0; x < W; ++x)
+//         dp.at(0, x) = grad.at(0, x);
+
+//     for (int y = 1; y < H; ++y) {
+//         for (int cx = 0; cx < W; ++cx) {
+//             float min_val = std::numeric_limits<float>::max();
+//             for (int dx = -1; dx <= 1; ++dx) {
+//                 int x = cx + dx;
+//                 if (x >= 0 && x < W)
+//                     min_val = std::min(min_val, dp.at(y-1, x));
+//             }
+//             dp.at(y, cx) = grad.at(y, cx) + min_val;
+//         }
+//     }
+// }
+
 static void grad_to_dp(const MatrixF &grad, MatrixF &dp) {
     assert(grad.width == dp.width && grad.height == dp.height);
-    int W = grad.width, H = grad.height;
-    for (int x = 0; x < W; ++x)
+
+    // Compute first row in parallel.
+    for (int x = 0; x < grad.width; ++x)
         dp.at(0, x) = grad.at(0, x);
 
-    for (int y = 1; y < H; ++y) {
-        for (int cx = 0; cx < W; ++cx) {
+    // Process each subsequent row sequentially; inner loop parallelized.
+    for (int y = 1; y < grad.height; ++y) {
+        for (int cx = 0; cx < grad.width; ++cx) {
             float min_val = std::numeric_limits<float>::max();
+            // Evaluate neighbors from the previous row.
             for (int dx = -1; dx <= 1; ++dx) {
                 int x = cx + dx;
-                if (x >= 0 && x < W)
-                    min_val = std::min(min_val, dp.at(y-1, x));
+                if (x >= 0 && x < grad.width) {
+                    float v = dp.at(y - 1, x);
+                    if (v < min_val)
+                        min_val = v;
+                }
             }
             dp.at(y, cx) = grad.at(y, cx) + min_val;
         }
