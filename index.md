@@ -30,7 +30,7 @@ nav a:hover {
 <nav>
   <a href="/15618Project">Proposal</a> |
   <a href="/15618Project/milestone">Milestone Report</a> |
-  <a href="/15618Project/page2">Final Report</a>
+  <a href="/15618Project/finalreport">Final Report</a>
 </nav>
 
 <!-- Main Content -->
