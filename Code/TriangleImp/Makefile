@@ -1,6 +1,4 @@
-# Makefile for seam_carving on macOS using Homebrew LLVM and libomp
 
-# Use the Homebrew-installed LLVM clang
 CXX = clang++
 CXXFLAGS = -std=c++11 -O2 -Xpreprocessor -fopenmp \
     -I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/libomp/include `pkg-config --cflags opencv4`
