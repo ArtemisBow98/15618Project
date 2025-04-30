@@ -13,13 +13,11 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 
-//------------------------------------------------------------------------------
 // Custom image and matrix classes
-//------------------------------------------------------------------------------
 
 class Img {
 public:
-    std::vector<uint32_t> pixels; // Each pixel is 32-bit BGRA.
+    std::vector<uint32_t> pixels;
     int width, height, stride;
 
     Img(int w, int h)
@@ -57,9 +55,7 @@ public:
     }
 };
 
-//------------------------------------------------------------------------------
 // Helper functions
-//------------------------------------------------------------------------------
 
 static float rgb_to_lum(uint32_t bgra) {
     float b = ((bgra >>  (8*0)) & 0xFF) / 255.0f;
@@ -190,9 +186,7 @@ static void markout_sobel_patches(MatrixF &grad, const std::vector<int> &seam) {
     }
 }
 
-//------------------------------------------------------------------------------
 // Main with performance measurement
-//------------------------------------------------------------------------------
 
 int main(int argc, char* argv[]) {
     if (argc < 3) {
@@ -285,7 +279,7 @@ int main(int argc, char* argv[]) {
     auto t_end = std::chrono::high_resolution_clock::now();
     double t_total = std::chrono::duration<double,std::milli>(t_end - t_start).count();
 
-    // Write output
+    // write output
     cv::Mat output(H, W, CV_8UC4, img.pixels.data(), img.stride * sizeof(uint32_t));
     if (!cv::imwrite(outputFile, output)) {
         std::cerr << "ERROR: Could not save " << outputFile << "\n";
@@ -293,7 +287,7 @@ int main(int argc, char* argv[]) {
     }
     std::cout << "OK: Generated " << outputFile << "\n\n";
 
-    // Summary timing
+    // timing
     std::cout << "Summary Timing (ms):\n";
     std::cout << "  Luminance:      " << t_lum   << "\n";
     std::cout << "  Sobel filter:   " << t_sobel << "\n";
